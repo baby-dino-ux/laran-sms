@@ -1,0 +1,486 @@
+{
+  "info": {
+    "name": "Scholarship Management System (SMS) API",
+    "_postman_id": "sms-laravel-api-collection",
+    "description": "Complete API collection for the Scholarship Management System built with Laravel + Sanctum. Base URL: {{base_url}}/api",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8000", "type": "string" },
+    { "key": "token",    "value": "",                      "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "🔐 Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{"key":"Content-Type","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/register","host":["{{base_url}}"],"path":["api","register"]},
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Juan\",\n  \"last_name\": \"Dela Cruz\",\n  \"email\": \"juan@example.com\",\n  \"password\": \"password123\",\n  \"password_confirmation\": \"password123\",\n  \"role\": \"Student\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Register (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [{"key":"Content-Type","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/register","host":["{{base_url}}"],"path":["api","register"]},
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Admin\",\n  \"last_name\": \"User\",\n  \"email\": \"admin@example.com\",\n  \"password\": \"password123\",\n  \"password_confirmation\": \"password123\",\n  \"role\": \"Admin\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [{"listen":"test","script":{"exec":["var json = pm.response.json();","if(json.token){ pm.collectionVariables.set('token', json.token); }"],"type":"text/javascript"}}],
+          "request": {
+            "method": "POST",
+            "header": [{"key":"Content-Type","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/login","host":["{{base_url}}"],"path":["api","login"]},
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"password123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Authenticated User (Me)",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/me","host":["{{base_url}}"],"path":["api","me"]}
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/logout","host":["{{base_url}}"],"path":["api","logout"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "👤 User Profile",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/profile","host":["{{base_url}}"],"path":["api","profile"]}
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/profile","host":["{{base_url}}"],"path":["api","profile"]},
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Juan\",\n  \"last_name\": \"Santos\",\n  \"phone\": \"09171234567\",\n  \"address\": \"Cebu City\",\n  \"birthdate\": \"2000-01-15\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Upload Profile Picture",
+          "request": {
+            "method": "POST",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/profile/picture","host":["{{base_url}}"],"path":["api","profile","picture"]},
+            "body": {"mode":"formdata","formdata":[{"key":"picture","type":"file","src":""}]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "🛡️ Admin — User Management",
+      "item": [
+        {
+          "name": "List All Users",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/users","host":["{{base_url}}"],"path":["api","users"]}
+          }
+        },
+        {
+          "name": "Get Single User",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/users/1","host":["{{base_url}}"],"path":["api","users","1"]}
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/users/1","host":["{{base_url}}"],"path":["api","users","1"]},
+            "body": {"mode":"raw","raw":"{\n  \"first_name\": \"Updated Name\"\n}"}
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/users/1","host":["{{base_url}}"],"path":["api","users","1"]}
+          }
+        },
+        {
+          "name": "Assign Role",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/users/1/role","host":["{{base_url}}"],"path":["api","users","1","role"]},
+            "body": {"mode":"raw","raw":"{\n  \"role\": \"Admin\"\n}"}
+          }
+        }
+      ]
+    },
+    {
+      "name": "🎓 Scholarships",
+      "item": [
+        {
+          "name": "List Scholarships",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/scholarships","host":["{{base_url}}"],"path":["api","scholarships"]}
+          }
+        },
+        {
+          "name": "Get Scholarship",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/scholarships/1","host":["{{base_url}}"],"path":["api","scholarships","1"]}
+          }
+        },
+        {
+          "name": "Create Scholarship (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/scholarships","host":["{{base_url}}"],"path":["api","scholarships"]},
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"scholarship_name\": \"CHED Merit Scholarship\",\n  \"description\": \"For top performing students.\",\n  \"amount\": 20000,\n  \"slots\": 50,\n  \"deadline\": \"2025-12-31\",\n  \"status\": \"active\",\n  \"eligibility_criteria\": {\"gpa\": 1.75, \"year_level\": [\"3rd\", \"4th\"]}\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Scholarship (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/scholarships/1","host":["{{base_url}}"],"path":["api","scholarships","1"]},
+            "body": {"mode":"raw","raw":"{\n  \"slots\": 100,\n  \"status\": \"active\"\n}"}
+          }
+        },
+        {
+          "name": "Delete Scholarship (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/scholarships/1","host":["{{base_url}}"],"path":["api","scholarships","1"]}
+          }
+        },
+        {
+          "name": "Set Eligibility Criteria (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/scholarships/1/eligibility","host":["{{base_url}}"],"path":["api","scholarships","1","eligibility"]},
+            "body": {"mode":"raw","raw":"{\n  \"eligibility_criteria\": {\n    \"gpa\": 1.75,\n    \"enrolled\": true,\n    \"year_level\": [\"1st\",\"2nd\",\"3rd\",\"4th\"]\n  }\n}"}
+          }
+        }
+      ]
+    },
+    {
+      "name": "📋 Applications",
+      "item": [
+        {
+          "name": "List Applications",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/applications","host":["{{base_url}}"],"path":["api","applications"]}
+          }
+        },
+        {
+          "name": "Create Application",
+          "request": {
+            "method": "POST",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/applications","host":["{{base_url}}"],"path":["api","applications"]},
+            "body": {"mode":"raw","raw":"{\n  \"scholarship_id\": 1\n}"}
+          }
+        },
+        {
+          "name": "Get Application",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/applications/1","host":["{{base_url}}"],"path":["api","applications","1"]}
+          }
+        },
+        {
+          "name": "Update Application",
+          "request": {
+            "method": "PUT",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/applications/1","host":["{{base_url}}"],"path":["api","applications","1"]},
+            "body": {"mode":"raw","raw":"{\n  \"remarks\": \"Updating my draft application.\"\n}"}
+          }
+        },
+        {
+          "name": "Check Application Status",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/applications/1/status","host":["{{base_url}}"],"path":["api","applications","1","status"]}
+          }
+        },
+        {
+          "name": "Submit Application",
+          "request": {
+            "method": "POST",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/applications/1/submit","host":["{{base_url}}"],"path":["api","applications","1","submit"]}
+          }
+        },
+        {
+          "name": "Review Application (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/applications/1/review","host":["{{base_url}}"],"path":["api","applications","1","review"]}
+          }
+        },
+        {
+          "name": "Approve Application (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/applications/1/approve","host":["{{base_url}}"],"path":["api","applications","1","approve"]},
+            "body": {"mode":"raw","raw":"{\n  \"remarks\": \"Approved — meets all criteria.\"\n}"}
+          }
+        },
+        {
+          "name": "Reject Application (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/applications/1/reject","host":["{{base_url}}"],"path":["api","applications","1","reject"]},
+            "body": {"mode":"raw","raw":"{\n  \"remarks\": \"Does not meet GPA requirement.\"\n}"}
+          }
+        }
+      ]
+    },
+    {
+      "name": "📁 Documents",
+      "item": [
+        {
+          "name": "List Documents",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/documents","host":["{{base_url}}"],"path":["api","documents"]}
+          }
+        },
+        {
+          "name": "Upload Document",
+          "request": {
+            "method": "POST",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/documents","host":["{{base_url}}"],"path":["api","documents"]},
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {"key":"file","type":"file","src":""},
+                {"key":"document_type","value":"transcript","type":"text"},
+                {"key":"application_id","value":"1","type":"text"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Document",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/documents/1","host":["{{base_url}}"],"path":["api","documents","1"]}
+          }
+        },
+        {
+          "name": "Download Document",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"}],
+            "url": {"raw":"{{base_url}}/api/documents/1/download","host":["{{base_url}}"],"path":["api","documents","1","download"]}
+          }
+        },
+        {
+          "name": "Delete Document",
+          "request": {
+            "method": "DELETE",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/documents/1","host":["{{base_url}}"],"path":["api","documents","1"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏆 Awards",
+      "item": [
+        {
+          "name": "List Awards",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/awards","host":["{{base_url}}"],"path":["api","awards"]}
+          }
+        },
+        {
+          "name": "Grant Award (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/awards","host":["{{base_url}}"],"path":["api","awards"]},
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 2,\n  \"scholarship_id\": 1,\n  \"application_id\": 1,\n  \"amount_granted\": 20000,\n  \"award_date\": \"2025-06-15\",\n  \"notes\": \"First semester award.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Award History",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/awards/history","host":["{{base_url}}"],"path":["api","awards","history"]}
+          }
+        },
+        {
+          "name": "Get Award",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/awards/1","host":["{{base_url}}"],"path":["api","awards","1"]}
+          }
+        },
+        {
+          "name": "Send Award Notification (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/awards/1/notify","host":["{{base_url}}"],"path":["api","awards","1","notify"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔔 Notifications",
+      "item": [
+        {
+          "name": "List Notifications",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/notifications","host":["{{base_url}}"],"path":["api","notifications"]}
+          }
+        },
+        {
+          "name": "Get Notification",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/notifications/1","host":["{{base_url}}"],"path":["api","notifications","1"]}
+          }
+        },
+        {
+          "name": "Send Notification (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/notifications/send","host":["{{base_url}}"],"path":["api","notifications","send"]},
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 2,\n  \"title\": \"Application Update\",\n  \"message\": \"Your application has been received and is under review.\",\n  \"type\": \"application\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Mark Notification as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/notifications/1/read","host":["{{base_url}}"],"path":["api","notifications","1","read"]}
+          }
+        },
+        {
+          "name": "Mark All Notifications as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/notifications/read-all","host":["{{base_url}}"],"path":["api","notifications","read-all"]}
+          }
+        },
+        {
+          "name": "Delete Notification",
+          "request": {
+            "method": "DELETE",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/notifications/1","host":["{{base_url}}"],"path":["api","notifications","1"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "📊 Reports (Admin)",
+      "item": [
+        {
+          "name": "Dashboard Summary",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/reports/dashboard","host":["{{base_url}}"],"path":["api","reports","dashboard"]}
+          }
+        },
+        {
+          "name": "Applications Report",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {
+              "raw": "{{base_url}}/api/reports/applications?status=approved",
+              "host": ["{{base_url}}"],
+              "path": ["api","reports","applications"],
+              "query": [{"key":"status","value":"approved","description":"Filter by: draft, submitted, under_review, approved, rejected"}]
+            }
+          }
+        },
+        {
+          "name": "Awards Report",
+          "request": {
+            "method": "GET",
+            "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Accept","value":"application/json"}],
+            "url": {"raw":"{{base_url}}/api/reports/awards","host":["{{base_url}}"],"path":["api","reports","awards"]}
+          }
+        }
+      ]
+    }
+  ]
+}
