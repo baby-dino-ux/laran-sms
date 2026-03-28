@@ -6,20 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('scholarships', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->decimal('amount', 10, 2)->nullable();
+            $table->integer('slots')->default(0);
+            $table->date('deadline')->nullable();
+            $table->enum('status', ['active', 'inactive', 'closed'])->default('active');
+            $table->json('eligibility_criteria')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('scholarships');
