@@ -1,5 +1,7 @@
 <?php
 
+
+
 use App\Http\Controllers\Api\ApplicationController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AwardController;
@@ -10,6 +12,7 @@ use App\Http\Controllers\Api\ScholarshipController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes — Scholarship Management System (SMS)
@@ -17,14 +20,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 // ─── Public: Authentication ───────────────────────────────────────────────────
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login',    [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+
 
 // ─── Protected Routes ─────────────────────────────────────────────────────────
 Route::middleware('auth:sanctum')->group(function () {
 
     // Auth
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/me',      [AuthController::class, 'me']);
 
     // ── User Profile ──────────────────────────────────────────────────────────

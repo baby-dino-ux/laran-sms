@@ -4,44 +4,46 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-// ✅ Import related models
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
 use App\Models\Application;
 
 class Scholarship extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
-    // Primary key
     protected $primaryKey = 'scholarship_id';
 
-    // Mass assignable fields
     protected $fillable = [
         'scholarship_name',
         'description',
         'amount',
+        'slots',
         'deadline',
         'created_by',
         'status',
+        'eligibility_criteria',
     ];
 
-    // Casts for attributes
     protected $casts = [
-        'deadline' => 'date',
-        'amount'   => 'decimal:2',
+        'deadline'             => 'date',
+        'amount'               => 'decimal:2',
+        'eligibility_criteria' => 'array',
     ];
 
-    // ── Relationships ──────────────────────────────
-
-    // Scholarship belongs to a creator (Admin/User)
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by', 'user_id');
     }
 
-    // Scholarship has many applications
     public function applications()
     {
         return $this->hasMany(Application::class, 'scholarship_id', 'scholarship_id');
     }
+
+    public function awards()
+    {
+        return $this->hasMany(Award::class, 'scholarship_id', 'scholarship_id');
+    }
 }
+

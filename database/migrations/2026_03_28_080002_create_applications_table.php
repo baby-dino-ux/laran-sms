@@ -21,15 +21,15 @@ return new class extends Migration
             $table->softDeletes();
 
             $table->foreign('user_id')
-                  ->references('id')->on('users')
+                  ->references('user_id')->on('users')
                   ->onDelete('cascade');
 
             $table->foreign('scholarship_id')
-                  ->references('id')->on('scholarships')
+                  ->references('scholarship_id')->on('scholarships')
                   ->onDelete('cascade');
 
             $table->foreign('reviewed_by')
-                  ->references('id')->on('users')
+                  ->references('user_id')->on('users')
                   ->onDelete('set null');
         });
     }

@@ -6,9 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-// ✅ Import related models
-use App\Models\Scholarship;
-use App\Models\Application;
 
 class User extends Authenticatable
 {
@@ -22,12 +19,32 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'phone',
+        'address',
+        'profile_picture',
+        'birthdate',
+        'student_id',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
+    protected $casts = [
+        'birthdate'         => 'date',
+        'email_verified_at' => 'datetime',
+    ];
+
+    public function getAuthIdentifierName()
+    {
+        return 'user_id';
+    }
+
+    public function isAdmin(): bool
+    {
+        return strtolower($this->role) === 'admin';
+    }
 
     // ── Relationships ──────────────────────────────
     public function scholarships()
@@ -40,15 +57,19 @@ class User extends Authenticatable
         return $this->hasMany(Application::class, 'user_id', 'user_id');
     }
 
-    // ── Helpers ────────────────────────────────────
-    public function isAdmin(): bool
+    public function documents()
     {
-        return $this->role === 'Admin';
+        return $this->hasMany(Document::class, 'user_id', 'user_id');
     }
 
-    // ── Token table key fix ────────────────────────
-    public function getAuthIdentifierName()
+    public function awards()
     {
-        return 'user_id';
+        return $this->hasMany(Award::class, 'user_id', 'user_id');
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(SmsNotification::class, 'user_id', 'user_id');
     }
 }
+
